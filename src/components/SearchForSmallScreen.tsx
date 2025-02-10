@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import Input from "./Input";
 import Button from "./Button";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -21,10 +22,22 @@ function SearchForSmallScreen({ open, setOpenSearch }: SearchForSmallScreenProps
     };
 
     return (
-        <>
+        <AnimatePresence>
             {open && (
-                <div className="fixed bg-black bg-opacity-90 z-50 inset-0 h-screen w-full flex items-start justify-start">
-                    <div className="sm:p-8 p-4 relative w-full">
+                <motion.div
+                    className="fixed bg-black bg-opacity-90 z-50 inset-0 h-screen w-full flex items-start justify-start"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <motion.div
+                        className="sm:p-8 p-4 relative w-full"
+                        initial={{ y: -30 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: -30 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         <div className="absolute top-5 right-5">
                             <IoCloseCircleOutline size={30} onClick={() => setOpenSearch(false)} />
                         </div>
@@ -45,10 +58,10 @@ function SearchForSmallScreen({ open, setOpenSearch }: SearchForSmallScreenProps
                                 Search
                             </Button>
                         </form>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             )}
-        </>
+        </AnimatePresence>
     );
 }
 

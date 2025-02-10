@@ -1,21 +1,14 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Search, Button, Logo, SearchForSmallScreen } from "../index";
-import { Link } from "react-router-dom";
-import {
-    IoCloseCircleOutline,
-    BiLike,
-    CiSearch,
-    HiOutlineVideoCamera,
-    SlMenu,
-} from "../icons";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { IoCloseCircleOutline, BiLike, CiSearch, HiOutlineVideoCamera, SlMenu } from "../icons";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
 import { IoMdLogOut } from "react-icons/io";
 import { userLogout } from "../../store/Slices/authSlic";
 import { RootState, AppDispatch } from "../../store/store";
 
 const Navbar: React.FC = () => {
-    
     const [toggleMenu, setToggleMenu] = useState<boolean>(false);
     const [openSearch, setOpenSearch] = useState<boolean>(false);
     const authStatus = useSelector((state: RootState) => state.auth.status);
@@ -30,16 +23,8 @@ const Navbar: React.FC = () => {
     };
 
     const sidePanelItems = [
-        {
-            icon: <BiLike size={25} />, 
-            title: "Liked Videos", 
-            url: "/liked-videos"
-        },
-        {
-            icon: <HiOutlineVideoCamera size={25} />, 
-            title: "My Content", 
-            url: `/channel/${username}`
-        },
+        { icon: <BiLike size={25} />, title: "Liked Videos", url: "/liked-videos" },
+        { icon: <HiOutlineVideoCamera size={25} />, title: "My Content", url: `/channel/${username}` },
     ];
 
     return (
@@ -54,16 +39,26 @@ const Navbar: React.FC = () => {
                 </div>
 
                 <div className="text-white w-full inline-flex justify-end sm:hidden pr-4">
-                    <CiSearch size={30} fontWeight={"bold"} onClick={() => setOpenSearch((prev) => !prev)} />
-                    {openSearch && (
-                        <SearchForSmallScreen open={openSearch} setOpenSearch={setOpenSearch} />
-                    )}
+                    <motion.div whileTap={{ scale: 0.9 }}>
+                        <CiSearch size={30} fontWeight={"bold"} onClick={() => setOpenSearch((prev) => !prev)} />
+                    </motion.div>
                 </div>
 
+                    {openSearch && (
+                        <div>
+                            <SearchForSmallScreen open={openSearch} setOpenSearch={setOpenSearch} />
+                        </div>
+                    )}
+
                 {authStatus ? (
-                    <div className="rounded-full sm:block hidden">
-                        <img src={profileImg} alt="profileImg" className="rounded-full w-10 h-10 object-cover" />
-                    </div>
+                    <motion.img
+                        src={profileImg}
+                        alt="profileImg"
+                        className="rounded-full w-10 h-10 object-cover sm:block hidden"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                    />
                 ) : (
                     <div className="space-x-2 sm:block hidden">
                         <Link to={"/login"}>
@@ -75,51 +70,80 @@ const Navbar: React.FC = () => {
                     </div>
                 )}
 
-                <div className="sm:hidden block">
-                    <div className="text-white">
-                        <SlMenu size={24} onClick={() => setToggleMenu((prev) => !prev)} />
-                    </div>
-                </div>
+                <motion.div whileTap={{ scale: 0.9 }} className="sm:hidden block">
+                    <SlMenu size={24} onClick={() => setToggleMenu((prev) => !prev)} />
+                </motion.div>
 
-                {toggleMenu && (
-                    <div className="fixed right-0 top-0 text-white flex flex-col border-l h-screen w-[70%] bg-[#0F0F0F] sm:hidden rounded-lg outline-none">
-                        <div className="w-full border-b h-20 flex items-center mb-2 justify-between px-3">
-                            <div className="flex items-center gap-2">
+                <AnimatePresence>
+                    {toggleMenu && (
+                        <motion.div
+                            initial={{ x: "100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "100%" }}
+                            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                            className="fixed right-0 top-0 text-white flex flex-col border-l h-screen w-[70%] bg-[#0F0F0F] sm:hidden rounded-lg outline-none"
+                        >
+                            <div className="w-full border-b h-20 flex items-center mb-2 justify-between px-3">
                                 <Logo />
-                            </div>
-                            <IoCloseCircleOutline size={35} onClick={() => setToggleMenu((prev) => !prev)} />
-                        </div>
-
-                        <div className="flex flex-col justify-between h-full py-5 px-3">
-                            <div className="flex flex-col gap-5">
-                                {sidePanelItems.map((item) => (
-                                    <NavLink to={item.url} key={item.title} onClick={() => setToggleMenu((prev) => !prev)} className={({ isActive }) => (isActive ? "bg-purple-500" : "") }>
-                                        <div className="flex items-center border border-slate-500 gap-5 px-3 py-1 hover:bg-purple-500">
-                                            <div>{item.icon}</div>
-                                            <span className="text-lg">{item.title}</span>
-                                        </div>
-                                    </NavLink>
-                                ))}
+                                <motion.div whileTap={{ scale: 0.8 }}>
+                                    <IoCloseCircleOutline size={35} onClick={() => setToggleMenu(false)} />
+                                </motion.div>
                             </div>
 
-                            {!authStatus ? (
-                                <div className="flex flex-col space-y-5 mb-3">
-                                    <Link to={"/login"}>
-                                        <Button className="w-full bg-[#222222] border hover:bg-white hover:text-black border-slate-500 py-1 px-3">Login</Button>
-                                    </Link>
-                                    <Link to={"/signup"}>
-                                        <Button className="w-full font-semibold border border-slate-500 hover:bg-white hover:text-black py-1 px-3">Sign up</Button>
-                                    </Link>
-                                </div>
-                            ) : (
-                                <div className="flex gap-2 justify-start items-start cursor-pointer py-1 px-2 border border-slate-600" onClick={() => logout()}>
-                                    <IoMdLogOut size={25} />
-                                    <span className="text-base">Logout</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
+                            <div className="flex flex-col justify-between h-full py-5 px-3">
+                                <motion.div className="flex flex-col gap-5">
+                                    {sidePanelItems.map((item) => (
+                                        <NavLink
+                                            to={item.url}
+                                            key={item.title}
+                                            onClick={() => setToggleMenu(false)}
+                                            className={({ isActive }) => (isActive ? "bg-purple-500" : "")}
+                                        >
+                                            <motion.div
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="flex items-center border border-slate-500 gap-5 px-3 py-1 hover:bg-purple-500"
+                                            >
+                                                <div>{item.icon}</div>
+                                                <span className="text-lg">{item.title}</span>
+                                            </motion.div>
+                                        </NavLink>
+                                    ))}
+                                </motion.div>
+
+                                {!authStatus ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="flex flex-col space-y-5 mb-3"
+                                    >
+                                        <Link to={"/login"}>
+                                            <Button className="w-full bg-[#222222] border hover:bg-white hover:text-black border-slate-500 py-1 px-3">
+                                                Login
+                                            </Button>
+                                        </Link>
+                                        <Link to={"/signup"}>
+                                            <Button className="w-full font-semibold border border-slate-500 hover:bg-white hover:text-black py-1 px-3">
+                                                Sign up
+                                            </Button>
+                                        </Link>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        className="flex gap-2 justify-start items-start cursor-pointer py-1 px-2 border border-slate-600"
+                                        onClick={() => logout()}
+                                    >
+                                        <IoMdLogOut size={25} />
+                                        <span className="text-base">Logout</span>
+                                    </motion.div>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </nav>
         </>
     );
