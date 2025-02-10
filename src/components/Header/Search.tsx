@@ -19,7 +19,7 @@ const Search: React.FC = () => {
     return (
         <form onSubmit={handleSubmit(search)}>
             <Input
-                placeholder="Search"
+                placeholder="Search "
                 {...register("query", { required: true })}
             />
         </form>
