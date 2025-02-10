@@ -7,7 +7,7 @@ import {
     CiSearch,
     HiOutlineVideoCamera,
     SlMenu,
-} from "../icons.js";
+} from "../icons.ts";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoMdLogOut } from "react-icons/io";
