@@ -4,6 +4,8 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./store/Slices/authSlic";
 import Layout from "./Layout/Layout";
+import AuthLayout from "./components/AuthLayout";
+import HomePage from "./pages/HomePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,7 +17,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="*" element={<Layout />} />
+        <Route path="/" element={<Layout />} >
+        <Route path="" element={<AuthLayout authentication={false}>
+             <HomePage />
+        </AuthLayout>} />
+        </Route>
       </Routes>
       <Toaster
                 position="top-right"
