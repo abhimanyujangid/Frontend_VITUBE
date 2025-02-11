@@ -73,7 +73,6 @@ const Navbar: React.FC = () => {
                 <motion.div whileTap={{ scale: 0.9 }} className="sm:hidden block">
                     <SlMenu size={24} onClick={() => setToggleMenu((prev) => !prev)} />
                 </motion.div>
-
                 <AnimatePresence>
                     {toggleMenu && (
                         <motion.div
