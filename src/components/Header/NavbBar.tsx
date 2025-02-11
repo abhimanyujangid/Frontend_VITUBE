@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
 
     return (
         <>
-            <nav className="w-full bg-[#0E0F0F] flex justify-between items-center p-4 sm:gap-5 gap-2 border-b-2 border-gray-500 sticky top-0 z-50">
+            <nav className="w-full bg-gray-900 flex justify-between items-center p-4 sm:gap-5 gap-2 border-b-2 border-gray-500 sticky top-0 z-50">
                 <div className="flex items-center justify-center gap-2 cursor-pointer">
                     <Logo />
                 </div>
@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
                 )}
 
                 <motion.div whileTap={{ scale: 0.9 }} className="sm:hidden block">
-                    <SlMenu size={24} onClick={() => setToggleMenu((prev) => !prev)} />
+                    <SlMenu size={24} onClick={() => setToggleMenu((prev) => !prev)} color="white"/>
                 </motion.div>
                 <AnimatePresence>
                     {toggleMenu && (
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
                             transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                            className="fixed right-0 top-0 text-white flex flex-col border-l h-screen w-[70%] bg-[#0F0F0F] sm:hidden rounded-lg outline-none"
+                            className="fixed right-0 top-0 text-white flex flex-col border-l h-screen w-[70%] bg-gray-900 sm:hidden rounded-lg outline-none"
                         >
                             <div className="w-full border-b h-20 flex items-center mb-2 justify-between px-3">
                                 <Logo />

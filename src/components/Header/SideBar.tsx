@@ -18,60 +18,13 @@ function SideBar() {
     const navigate = useNavigate();
     const username = useSelector((state: RootState) => state.auth?.userData?.username);
 
-    const sidebarTopItems = [
-        {
-            icon: <RiHome6Line size={25} />,
-            title: "Home",
-            url: "/",
-        },
-        {
-            icon: <BiLike size={25} />,
-            title: "Liked Videos",
-            url: "/liked-videos",
-        },
-        {
-            icon: <BiHistory size={25} />,
-            title: "History",
-            url: "/history",
-        },
-        {
-            icon: <HiOutlineVideoCamera size={25} />,
-            title: "My Content",
-            url: `/channel/${username}`,
-        },
-        {
-            icon: <IoFolderOutline size={25} />,
-            title: "Collections",
-            url: "/collections",
-        },
-        {
-            icon: <TbUserCheck size={25} />,
-            title: "Subscriptions",
-            url: "/subscriptions",
-        },
-    ];
-
-    const bottomBarItems = [
-        {
-            icon: <RiHome6Line size={25} />,
-            title: "Home",
-            url: "/",
-        },
-        {
-            icon: <BiHistory size={25} />,
-            title: "History",
-            url: "/history",
-        },
-        {
-            icon: <IoFolderOutline size={25} />,
-            title: "Collections",
-            url: "/collections",
-        },
-        {
-            icon: <TbUserCheck size={25} />,
-            title: "Subscriptions",
-            url: "/subscriptions",
-        },
+    const sidebarItems = [
+        { icon: <RiHome6Line size={25} />, title: "Home", url: "/" },
+        { icon: <BiLike size={25} />, title: "Liked Videos", url: "/liked-videos" },
+        { icon: <BiHistory size={25} />, title: "History", url: "/history" },
+        { icon: <HiOutlineVideoCamera size={25} />, title: "My Content", url: `/channel/${username}` },
+        { icon: <IoFolderOutline size={25} />, title: "Collections", url: "/collections" },
+        { icon: <TbUserCheck size={25} />, title: "Subscriptions", url: "/subscriptions" },
     ];
 
     const logout = async () => {
@@ -81,62 +34,53 @@ function SideBar() {
 
     return (
         <>
-            <div className="sm:block hidden">
-                <div className="text-white lg:w-56 md:w-44 w-16 sm:p-3 p-2 border-slate-600 border-r h-screen flex flex-col justify-between">
-                    <div className="flex flex-col gap-4 mt-5">
-                        {sidebarTopItems.map((item) => (
-                            <NavLink
-                                to={item.url}
-                                key={item.title}
-                                className={({ isActive }) =>
-                                    isActive ? "bg-purple-500" : ""
-                                }
-                            >
-                                <div className="flex items-center gap-2 justify-center sm:justify-start hover:bg-purple-500 cursor-pointer py-1 px-2 border border-slate-600">
-                                    {item.icon}
-                                    <span className="text-base hidden md:block">
-                                        {item.title}
-                                    </span>
-                                </div>
-                            </NavLink>
-                        ))}
-                    </div>
-
-                    <div className="space-y-4 mb-10">
-                        {username && (
-                            <div
-                                className="flex items-center gap-2 justify-center sm:justify-start hover:bg-purple-500 cursor-pointer py-1 px-2 border border-slate-600"
-                                onClick={() => logout()}
-                            >
-                                <IoMdLogOut size={25} />
-                                <span className="text-base hidden md:block">
-                                    Logout
-                                </span>
-                            </div>
-                        )}
-                        <div className="flex items-center gap-2 justify-center sm:justify-start hover:bg-purple-500 cursor-pointer py-1 px-2 border border-slate-600">
-                            <CiSettings size={25} />
-                            <span className="text-base hidden md:block">
-                                Settings
-                            </span>
-                        </div>
-                    </div>
+            {/* Desktop Sidebar */}
+            <div className="hidden sm:flex flex-col bg-gray-900 text-white w-64 h-screen p-4 border-r border-gray-700">
+                <nav className="space-y-2">
+                    {sidebarItems.map((item) => (
+                        <NavLink
+                            to={item.url}
+                            key={item.title}
+                            className={({ isActive }) =>
+                                `flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 hover:bg-purple-600 ${isActive ? "bg-purple-700" : ""}`
+                            }
+                        >
+                            {item.icon}
+                            <span className="text-lg">{item.title}</span>
+                        </NavLink>
+                    ))}
+                </nav>
+                
+                <div className="mt-auto space-y-2">
+                    {username && (
+                        <button 
+                            className="flex items-center gap-3 w-full px-4 py-2 text-left rounded-lg transition-all duration-300 hover:bg-red-600"
+                            onClick={logout}
+                        >
+                            <IoMdLogOut size={25} />
+                            <span className="text-lg">Logout</span>
+                        </button>
+                    )}
+                    <NavLink
+                        to="/settings"
+                        className="flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 hover:bg-gray-700"
+                    >
+                        <CiSettings size={25} />
+                        <span className="text-lg">Settings</span>
+                    </NavLink>
                 </div>
             </div>
-
-            <div className="border-t-2 text-white h-16 sm:hidden z-20 p-1 w-full flex justify-around fixed bottom-0 bg-[#0E0F0F]">
-                {bottomBarItems.map((item) => (
+            
+            {/* Mobile Bottom Navigation */}
+            <div className="sm:hidden fixed bottom-0 left-0 w-full bg-gray-900 text-white flex justify-around items-center py-3 border-t border-gray-700">
+                {sidebarItems.slice(0, 4).map((item) => (
                     <NavLink
                         to={item.url}
                         key={item.title}
-                        className={({ isActive }) =>
-                            isActive ? "text-purple-500" : ""
-                        }
+                        className={({ isActive }) => `flex flex-col items-center gap-1 text-sm transition-all duration-300 ${isActive ? "text-purple-400" : "text-gray-300"}`}
                     >
-                        <div className="flex flex-col items-center gap-1 cursor-pointer p-1">
-                            {item.icon}
-                            <span className="text-sm">{item.title}</span>
-                        </div>
+                        {item.icon}
+                        <span>{item.title}</span>
                     </NavLink>
                 ))}
             </div>
@@ -145,4 +89,3 @@ function SideBar() {
 }
 
 export default SideBar;
-

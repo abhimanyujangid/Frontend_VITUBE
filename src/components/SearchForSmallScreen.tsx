@@ -25,7 +25,7 @@ function SearchForSmallScreen({ open, setOpenSearch }: SearchForSmallScreenProps
         <AnimatePresence>
             {open && (
                 <motion.div
-                    className="fixed bg-black bg-opacity-90 z-50 inset-0 h-screen w-full flex items-start justify-start"
+                    className="fixed bg-gray-900 bg-opacity-90 z-50 inset-0 h-screen w-full flex items-start justify-start"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -39,7 +39,7 @@ function SearchForSmallScreen({ open, setOpenSearch }: SearchForSmallScreenProps
                         transition={{ duration: 0.3 }}
                     >
                         <div className="absolute top-5 right-5">
-                            <IoCloseCircleOutline size={30} onClick={() => setOpenSearch(false)} />
+                            <IoCloseCircleOutline size={30} onClick={() => setOpenSearch(false)} color="white" />
                         </div>
                         <form
                             onSubmit={handleSubmit((data) => search(data as { query: string }))}
